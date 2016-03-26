@@ -1,6 +1,8 @@
 package com.lgcampos.carros.activity;
 
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -8,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.lgcampos.carros.R;
+import com.lgcampos.carros.fragments.CarrosFragment;
+import com.lgcampos.carros.fragments.SiteLivroFragment;
 
 import livroandroid.lib.utils.NavDrawerUtil;
 
@@ -18,6 +22,13 @@ import livroandroid.lib.utils.NavDrawerUtil;
 public class BaseActivity extends livroandroid.lib.activity.BaseActivity {
 
     protected DrawerLayout drawerLayout;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        replaceFragment(CarrosFragment.newInstance(R.string.carros));
+    }
 
     protected void setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -59,24 +70,31 @@ public class BaseActivity extends livroandroid.lib.activity.BaseActivity {
     private void onNavDrawerItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_item_carros_todos:
-                toast("Cliclou em carros");
+                replaceFragment(CarrosFragment.newInstance(R.string.carros));
                 break;
             case R.id.nav_item_carros_classicos:
-                toast("Cliclou em carros clássicos");
+                replaceFragment(CarrosFragment.newInstance(R.string.classicos));
                 break;
             case R.id.nav_item_carros_esportivos:
-                toast("Cliclou em carros esportivos");
+                replaceFragment(CarrosFragment.newInstance(R.string.esportivos));
                 break;
             case R.id.nav_item_carros_luxo:
-                toast("Cliclou em carros de luxo");
+                replaceFragment(CarrosFragment.newInstance(R.string.luxo));
                 break;
             case R.id.nav_item_site_livro:
-                snack(drawerLayout, "Cliclou em site do livro");
+                replaceFragment(new SiteLivroFragment());
                 break;
             case R.id.nav_item_settings:
                 toast("Cliclou em configurações");
                 break;
         }
+    }
+
+    protected void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment, "TAG")
+                .commit();
     }
 
     @Override
