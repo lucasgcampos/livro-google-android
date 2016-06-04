@@ -1,16 +1,22 @@
 package com.lgcampos.carros.fragments;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lgcampos.carros.R;
+import com.lgcampos.carros.domain.Carro;
+
+import java.util.List;
 
 public class CarrosFragment extends BaseFragment {
 
     private int tipo;
+    private RecyclerView recyclerView;
+    private List<Carro> carros;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
