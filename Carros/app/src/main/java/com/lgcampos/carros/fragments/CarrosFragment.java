@@ -1,14 +1,20 @@
 package com.lgcampos.carros.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.lgcampos.carros.R;
+import com.lgcampos.carros.activity.CarroActivity;
+import com.lgcampos.carros.adapter.CarroAdapter;
 import com.lgcampos.carros.domain.Carro;
+import com.lgcampos.carros.domain.CarroService;
 
 import java.util.List;
 
@@ -31,10 +37,34 @@ public class CarrosFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_carros, container, false);
 
-        TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("Carros: " + getString(tipo));
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setHasFixedSize(true);
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        taskCarros();
+    }
+
+    private void taskCarros() {
+        this.carros = CarroService.getCarros(getContext(), tipo);
+        recyclerView.setAdapter(new CarroAdapter(getContext(), carros, onClickCarro()));
+    }
+
+    private CarroAdapter.CarroOnClickListener onClickCarro() {
+        return new CarroAdapter.CarroOnClickListener() {
+            public void onClickCarro(View view, int index) {
+                Carro carro = carros.get(index);
+                Intent intent = new Intent(getContext(), CarroActivity.class);
+                intent.putExtra("carro", carro);
+                startActivity(intent);
+            }
+        };
     }
 
     public static CarrosFragment newInstance(int tipo) {

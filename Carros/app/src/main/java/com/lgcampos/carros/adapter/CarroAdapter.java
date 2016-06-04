@@ -71,6 +71,10 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.CarrosViewHo
         }
     }
 
+    public interface CarroOnClickListener {
+        void onClickCarro(View view, int index);
+    }
+
     @Override
     public int getItemCount() {
         return carros != null ? carros.size() : 0;
