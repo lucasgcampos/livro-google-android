@@ -1,12 +1,11 @@
 package com.lgcampos.carros.domain;
 
-import java.io.Serializable;
-
 /**
  * @author Lucas Campos
  * @sinse 1.0.0
  */
-public class Carro implements Serializable {
+@org.parceler.Parcel
+public class Carro {
 
     public long id;
     public String tipo;
@@ -24,4 +23,5 @@ public class Carro implements Serializable {
                 "nome='" + nome + '\'' +
                 '}';
     }
+
 }

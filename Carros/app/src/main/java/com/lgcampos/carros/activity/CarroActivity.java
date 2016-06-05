@@ -1,15 +1,12 @@
 package com.lgcampos.carros.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.lgcampos.carros.R;
 import com.lgcampos.carros.domain.Carro;
 import com.lgcampos.carros.fragments.CarroFragment;
+
+import org.parceler.Parcels;
 
 public class CarroActivity extends BaseActivity {
 
@@ -18,17 +15,15 @@ public class CarroActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carro);
         setUpToolbar();
-        Carro carro = (Carro) getIntent().getSerializableExtra("carro");
+        Carro carro = Parcels.unwrap(getIntent().getParcelableExtra("carro"));
         getSupportActionBar().setTitle(carro.nome);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             CarroFragment fragment = new CarroFragment();
             fragment.setArguments(getIntent().getExtras());
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.carro_fragment, fragment).commit();
+            replaceFragment(fragment);
         }
-
 
     }
 

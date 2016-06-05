@@ -16,6 +16,8 @@ import com.lgcampos.carros.adapter.CarroAdapter;
 import com.lgcampos.carros.domain.Carro;
 import com.lgcampos.carros.domain.CarroService;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 public class CarrosFragment extends BaseFragment {
@@ -42,6 +44,14 @@ public class CarrosFragment extends BaseFragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
 
+        view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snack(recyclerView, "Exemplo de FAB Button" +
+                        "");
+            }
+        });
+
         return view;
     }
 
@@ -60,8 +70,8 @@ public class CarrosFragment extends BaseFragment {
         return new CarroAdapter.CarroOnClickListener() {
             public void onClickCarro(View view, int index) {
                 Carro carro = carros.get(index);
-                Intent intent = new Intent(getContext(), CarroActivity.class);
-                intent.putExtra("carro", carro);
+                Intent intent = new Intent(getActivity(), CarroActivity.class);
+                intent.putExtra("carro", Parcels.wrap(carro));
                 startActivity(intent);
             }
         };

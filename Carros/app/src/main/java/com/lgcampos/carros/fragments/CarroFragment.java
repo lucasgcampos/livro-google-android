@@ -14,6 +14,8 @@ import com.lgcampos.carros.R;
 import com.lgcampos.carros.domain.Carro;
 import com.squareup.picasso.Picasso;
 
+import org.parceler.Parcels;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -24,7 +26,7 @@ public class CarroFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_carro, container, false);
-        carro = (Carro) getArguments().getSerializable("carro");
+        carro = Parcels.unwrap(getArguments().getParcelable("carro"));
         return view;
     }
 
