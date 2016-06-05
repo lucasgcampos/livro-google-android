@@ -1,13 +1,16 @@
 package com.lgcampos.carros.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.lgcampos.carros.R;
+import com.lgcampos.carros.adapter.TabsAdapter;
 import com.lgcampos.carros.fragments.AboutDialog;
-import com.lgcampos.carros.fragments.CarrosFragment;
-import com.lgcampos.carros.fragments.CarrosTabFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -17,7 +20,26 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         setUpToolbar();
         setUpNavDrawer();
-        replaceFragment(new CarrosTabFragment());
+        setupViewPagerTabs();
+
+        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snack(v, "Exemplo de FAB Button" +
+                        "");
+            }
+        });
+    }
+
+    private void setupViewPagerTabs() {
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager.setOffscreenPageLimit(2);
+        viewPager.setAdapter(new TabsAdapter(getContext(), getSupportFragmentManager()));
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+        int cor = ContextCompat.getColor(getContext(), R.color.white);
+        tabLayout.setTabTextColors(cor, cor);
     }
 
     @Override
@@ -36,4 +58,6 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

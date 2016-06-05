@@ -22,7 +22,6 @@ public class CarroActivity extends BaseActivity {
         if (savedInstanceState == null) {
             CarroFragment fragment = new CarroFragment();
             fragment.setArguments(getIntent().getExtras());
-            replaceFragment(fragment);
         }
 
     }

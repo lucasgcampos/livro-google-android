@@ -28,7 +28,6 @@ public class BaseActivity extends livroandroid.lib.activity.BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        replaceFragment(CarrosFragment.newInstance(R.string.carros));
     }
 
     protected void setUpToolbar() {
@@ -71,31 +70,19 @@ public class BaseActivity extends livroandroid.lib.activity.BaseActivity {
     private void onNavDrawerItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_item_carros_todos:
-                replaceFragment(new CarrosTabFragment());
                 break;
             case R.id.nav_item_carros_classicos:
-                replaceFragment(CarrosFragment.newInstance(R.string.classicos));
                 break;
             case R.id.nav_item_carros_esportivos:
-                replaceFragment(CarrosFragment.newInstance(R.string.esportivos));
                 break;
             case R.id.nav_item_carros_luxo:
-                replaceFragment(CarrosFragment.newInstance(R.string.luxo));
                 break;
             case R.id.nav_item_site_livro:
-                replaceFragment(new SiteLivroFragment());
                 break;
             case R.id.nav_item_settings:
                 toast("Cliclou em configurações");
                 break;
         }
-    }
-
-    protected void replaceFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, fragment, "TAG")
-                .commit();
     }
 
     @Override
