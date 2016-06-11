@@ -1,8 +1,8 @@
 package com.lgcampos.carros.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -10,9 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.lgcampos.carros.R;
-import com.lgcampos.carros.fragments.CarrosFragment;
-import com.lgcampos.carros.fragments.CarrosTabFragment;
-import com.lgcampos.carros.fragments.SiteLivroFragment;
 
 import livroandroid.lib.utils.NavDrawerUtil;
 
@@ -27,7 +24,6 @@ public class BaseActivity extends livroandroid.lib.activity.BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     protected void setUpToolbar() {
@@ -72,17 +68,28 @@ public class BaseActivity extends livroandroid.lib.activity.BaseActivity {
             case R.id.nav_item_carros_todos:
                 break;
             case R.id.nav_item_carros_classicos:
+                startCarrosActivity(R.string.classicos);
                 break;
             case R.id.nav_item_carros_esportivos:
+                startCarrosActivity(R.string.esportivos);
                 break;
             case R.id.nav_item_carros_luxo:
+                startCarrosActivity(R.string.luxo);
                 break;
             case R.id.nav_item_site_livro:
+                Intent intent = new Intent(getContext(), SiteLivroActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_item_settings:
                 toast("Cliclou em configurações");
                 break;
         }
+    }
+
+    private void startCarrosActivity(int tipo) {
+        Intent intent = new Intent(getContext(), CarrosActivity.class);
+        intent.putExtra("tipo", tipo);
+        startActivity(intent);
     }
 
     @Override

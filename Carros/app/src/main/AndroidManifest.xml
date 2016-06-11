@@ -23,10 +23,24 @@
         <activity
             android:name=".activity.CarroActivity"
             android:label="@string/title_activity_carro"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.CarrosActivity"
             android:parentActivityName=".activity.MainActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity"/>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity android:name=".activity.SiteLivroActivity"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
         </activity>
     </application>
 
