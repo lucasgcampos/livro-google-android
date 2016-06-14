@@ -35,7 +35,7 @@ public class CarroFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         TextView textView = (TextView) getView().findViewById(R.id.tDesc);
         textView.setText(carro.desc);
-        ImageView imageView = (ImageView) getView().findViewById(R.id.image);
+        ImageView imageView = (ImageView) getView().findViewById(R.id.img);
         Picasso.with(getContext()).load(carro.urlFoto).fit().into(imageView);
     }
 }
