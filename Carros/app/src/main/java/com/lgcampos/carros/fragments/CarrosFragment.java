@@ -56,12 +56,8 @@ public class CarrosFragment extends BaseFragment {
     }
 
     private void taskCarros() {
-        try {
-            this.carros = CarroService.getCarros(getContext(), tipo);
-            recyclerView.setAdapter(new CarroAdapter(getContext(), carros, onClickCarro()));
-        } catch (IOException e) {
-            Log.e("livro", e.getMessage(), e);
-        }
+        this.carros = CarroService.getCarros(getContext(), tipo);
+        recyclerView.setAdapter(new CarroAdapter(getContext(), carros, onClickCarro()));
     }
 
     private CarroAdapter.CarroOnClickListener onClickCarro() {
