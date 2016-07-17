@@ -8,15 +8,12 @@ import com.lgcampos.carros.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import livroandroid.lib.utils.FileUtils;
-import livroandroid.lib.utils.XMLUtils;
+import livroandroid.lib.utils.HttpHelper;
 
 /**
  * Carregar {@link Carro}
@@ -28,16 +25,7 @@ public class CarroService {
 
     private static final boolean LOG_ON = false;
     private static final String TAG = CarroService.class.getSimpleName();
-
-    private static String readFile(Context context, int tipo) throws IOException {
-        if (tipo == R.string.classicos) {
-            return FileUtils.readRawFileString(context, R.raw.carros_classicos, "UTF-8");
-        } else if (tipo == R.string.esportivos) {
-            return FileUtils.readRawFileString(context, R.raw.carros_esportivos, "UTF-8");
-        }
-
-        return FileUtils.readRawFileString(context, R.raw.carros_luxo, "UTF-8");
-    }
+    private static final String URL = "http://www.livroandroid.com.br/livro/carros/carros_%s.json";
 
     private static List<Carro> parseJSON(Context context, String json) throws IOException {
         List<Carro> carros = new ArrayList<>();
@@ -77,13 +65,22 @@ public class CarroService {
         return carros;
     }
 
-    public static List<Carro> getCarros(Context context, int tipo)  {
-        try {
-            String json = readFile(context, tipo);
-            return parseJSON(context, json);
-        } catch (IOException e) {
-            Log.e(TAG, "Erro ao ler os carros: " + e.getMessage(), e);
-            return null;
+    public static List<Carro> getCarros(Context context, int tipo) throws IOException {
+        String tipoString = getTipo(tipo);
+        String url = String.format(URL, tipoString);
+
+        HttpHelper http = new HttpHelper();
+        String json = http.doGet(url);
+
+        return parseJSON(context, json);
+    }
+
+    private static String getTipo(int tipo) {
+        if (tipo == R.string.classicos) {
+            return "classicos";
+        } else if (tipo == R.string.esportivos) {
+            return "esportivos";
         }
+        return "luxo";
     }
 }
