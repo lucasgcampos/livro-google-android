@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.lgcampos.carros.ConfiguracoesActivity;
 import com.lgcampos.carros.R;
 
 import livroandroid.lib.utils.NavDrawerUtil;
@@ -81,7 +82,7 @@ public class BaseActivity extends livroandroid.lib.activity.BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.nav_item_settings:
-                toast("Cliclou em configurações");
+                startActivity(new Intent(getContext(), ConfiguracoesActivity.class));
                 break;
         }
     }
