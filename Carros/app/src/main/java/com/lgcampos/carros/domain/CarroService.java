@@ -1,6 +1,7 @@
 package com.lgcampos.carros.domain;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import com.lgcampos.carros.R;
@@ -9,11 +10,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import livroandroid.lib.utils.FileUtils;
 import livroandroid.lib.utils.HttpHelper;
+import livroandroid.lib.utils.IOUtils;
+import livroandroid.lib.utils.SDCardUtils;
 
 /**
  * Carregar {@link Carro}
@@ -72,7 +77,28 @@ public class CarroService {
         HttpHelper http = new HttpHelper();
         String json = http.doGet(url);
 
+        salvarArquivoNaMemoriaInterna(context, url, json);
+        salvarArquivoNaMemoriaExterna(context, url, json);
+
         return parseJSON(context, json);
+    }
+
+    private static void salvarArquivoNaMemoriaExterna(Context context, String url, String json) {
+        String fileName = url.substring(url.lastIndexOf("/") + 1);
+        File file = SDCardUtils.getPrivateFile(context, fileName, Environment.DIRECTORY_DOWNLOADS);
+        IOUtils.writeString(file, json);
+        Log.d(TAG, "1) Arquivo privado salvo na pasta downloads: " + file);
+
+        file = SDCardUtils.getPublicFile(fileName, Environment.DIRECTORY_DOWNLOADS);
+        IOUtils.writeString(file, json);
+        Log.d(TAG, "2) Arquivo público salvo na pasta downloads: " + file);
+    }
+
+    private static void salvarArquivoNaMemoriaInterna(Context context, String url, String json) {
+        String fileName = url.substring(url.lastIndexOf("/") + 1);
+        File file = FileUtils.getFile(context, fileName);
+        IOUtils.writeString(file, json);
+        Log.d(TAG, "Arquivo salvo: " + file);
     }
 
     private static String getTipo(int tipo) {

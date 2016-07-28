@@ -5,6 +5,7 @@ import android.test.AndroidTestCase;
 import com.lgcampos.carros.domain.Carro;
 import com.lgcampos.carros.domain.CarroService;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class CarroServiceTest extends AndroidTestCase {
 
-    public void testGetCarros() {
+    public void testGetCarros() throws IOException {
         List<Carro> carros = CarroService.getCarros(getContext(), R.string.esportivos);
         assertNotNull(carros);
 
