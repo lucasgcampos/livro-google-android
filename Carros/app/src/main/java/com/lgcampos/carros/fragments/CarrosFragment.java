@@ -105,7 +105,7 @@ public class CarrosFragment extends BaseFragment {
 
         @Override
         public List<Carro> execute() throws Exception {
-            return CarroService.getCarros(getContext(), tipo);
+            return CarroService.getCarrosFromWebService(getContext(), tipo);
         }
 
         @Override

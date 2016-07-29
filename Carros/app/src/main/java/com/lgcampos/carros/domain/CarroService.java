@@ -70,17 +70,75 @@ public class CarroService {
         return carros;
     }
 
-    public static List<Carro> getCarros(Context context, int tipo) throws IOException {
+    public static List<Carro> getCarrosFromWebService(Context context, int tipo) throws IOException {
         String tipoString = getTipo(tipo);
         String url = String.format(URL, tipoString);
 
         HttpHelper http = new HttpHelper();
         String json = http.doGet(url);
 
-        salvarArquivoNaMemoriaInterna(context, url, json);
-        salvarArquivoNaMemoriaExterna(context, url, json);
+        List<Carro> carros = parseJSON(context, json);
+        salvarCarros(context, tipo, carros);
 
-        return parseJSON(context, json);
+        return carros;
+    }
+
+    private static void salvarCarros(Context context, int tipo, List<Carro> carros) {
+        CarroDB db = new CarroDB(context);
+        try {
+            String tipoString = String.valueOf(tipo);
+            db.deleteCarrosByTipo(tipoString);
+
+            for (Carro carro : carros) {
+                carro.tipo = tipoString;
+                Log.d(TAG, "Salvando o carro " + carro.nome);
+                db.save(carro);
+            }
+        } finally {
+            db.close();
+        }
+    }
+
+    public static List<Carro> getCarros(Context context, int tipo) throws IOException {
+        List<Carro> carros = getCarrosFromBranco(context, tipo);
+
+
+//        List<Carro> carros = getCarrosDoArquivo(context, tipo);
+        if (carros != null && !carros.isEmpty()) {
+            return carros;
+        }
+
+        return getCarrosFromWebService(context, tipo);
+    }
+
+    private static List<Carro> getCarrosFromBranco(Context context, int tipo) {
+        CarroDB db = new CarroDB(context);
+        try {
+            String tipoString = String.valueOf(tipo);
+            List<Carro> carros = db.findAllbyTipo(tipoString);
+            Log.d(TAG, "Retornando " + carros.size() + " carros [" + tipoString + "] do banco");
+            return carros;
+        } finally {
+            db.close();
+        }
+    }
+
+    public static List<Carro> getCarrosDoArquivo(Context context, int tipo) throws IOException {
+        String tipoString = getTipo(tipo);
+        String fileName = String.format("carros_%s.json", tipoString);
+        Log.d(TAG, "Abrindo arquivo: " + fileName);
+
+        String json = FileUtils.readFile(context, fileName, "UTF-8");
+
+        if (json == null) {
+            Log.d(TAG, "Arquivo " + fileName + " não encontrado.");
+            return null;
+        }
+
+        List<Carro> carros = parseJSON(context, json);
+        Log.d(TAG, "Retornando carros do arquivo " + fileName + ".");
+
+        return carros;
     }
 
     private static void salvarArquivoNaMemoriaExterna(Context context, String url, String json) {
