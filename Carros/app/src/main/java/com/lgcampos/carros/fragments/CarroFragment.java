@@ -57,7 +57,8 @@ public class CarroFragment extends BaseFragment {
             EditarCarroDialog.show(getFragmentManager(), carro, new EditarCarroDialog.Callback() {
                 @Override
                 public void onCarroUpdated(Carro carro) {
-                    CarroDB db = new CarroDB(getContext());
+                    toast("Editado: [" + carro.nome + "].");
+                    CarroDB db = new CarroDB(getActivity());
                     db.save(carro);
 
                     CarroActivity activity = (CarroActivity) getActivity();
@@ -66,7 +67,15 @@ public class CarroFragment extends BaseFragment {
             });
             return true;
         } else if (item.getItemId() == R.id.action_delete) {
-            toast("Deletar: " + carro.nome);
+            DeletarCarroDialog.show(getFragmentManager(), new DeletarCarroDialog.Callback() {
+                @Override
+                public void onClickYes() {
+                    toast("Carro [" + carro.nome + "] deletado.");
+                    CarroDB db = new CarroDB(getActivity());
+                    db.delete(carro);
+                    getActivity().finish();
+                }
+            });
             return true;
         } else if (item.getItemId() == R.id.action_share) {
             toast("Compartilhar: " + carro.nome);
