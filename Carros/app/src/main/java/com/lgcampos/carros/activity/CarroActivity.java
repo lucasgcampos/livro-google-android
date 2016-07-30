@@ -1,6 +1,7 @@
 package com.lgcampos.carros.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.widget.ImageView;
 
 import com.lgcampos.carros.R;
@@ -30,6 +31,11 @@ public class CarroActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.carro_fragment, fragment).commit();
         }
 
+    }
+
+    public void setTitle(String title) {
+        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        toolbarLayout.setTitle(title);
     }
 
 }

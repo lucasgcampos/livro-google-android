@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lgcampos.carros.R;
+import com.lgcampos.carros.activity.CarroActivity;
 import com.lgcampos.carros.domain.Carro;
+import com.lgcampos.carros.domain.CarroDB;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -52,7 +54,16 @@ public class CarroFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_edit) {
-            toast("Editar: " + carro.nome);
+            EditarCarroDialog.show(getFragmentManager(), carro, new EditarCarroDialog.Callback() {
+                @Override
+                public void onCarroUpdated(Carro carro) {
+                    CarroDB db = new CarroDB(getContext());
+                    db.save(carro);
+
+                    CarroActivity activity = (CarroActivity) getActivity();
+                    activity.setTitle(carro.nome);
+                }
+            });
             return true;
         } else if (item.getItemId() == R.id.action_delete) {
             toast("Deletar: " + carro.nome);
