@@ -79,7 +79,7 @@ public class CarrosFragment extends BaseFragment {
     }
 
     private void taskCarros(boolean pullToRefresh) {
-        startTask("carros", new GetCarrosTask(), pullToRefresh ? R.id.swipe_to_refresh : R.id.progress);
+        startTask("carros", new GetCarrosTask(pullToRefresh), pullToRefresh ? R.id.swipe_to_refresh : R.id.progress);
     }
 
     private CarroAdapter.CarroOnClickListener onClickCarro() {
@@ -103,9 +103,16 @@ public class CarrosFragment extends BaseFragment {
 
     private class GetCarrosTask implements TaskListener<List<Carro>> {
 
+        private final boolean pullToRefresh;
+
+        public GetCarrosTask(boolean pullToRefresh) {
+
+            this.pullToRefresh = pullToRefresh;
+        }
+
         @Override
         public List<Carro> execute() throws Exception {
-            return CarroService.getCarrosFromWebService(getContext(), tipo);
+            return CarroService.getCarrosFromWebService(getContext(), tipo, pullToRefresh);
         }
 
         @Override

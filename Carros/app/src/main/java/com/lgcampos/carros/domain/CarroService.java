@@ -70,7 +70,7 @@ public class CarroService {
         return carros;
     }
 
-    public static List<Carro> getCarrosFromWebService(Context context, int tipo) throws IOException {
+    public static List<Carro> getCarrosFromWebService(Context context, int tipo, boolean pullToRefresh) throws IOException {
         String tipoString = getTipo(tipo);
         String url = String.format(URL, tipoString);
 
@@ -99,16 +99,14 @@ public class CarroService {
         }
     }
 
-    public static List<Carro> getCarros(Context context, int tipo) throws IOException {
-        List<Carro> carros = getCarrosFromBranco(context, tipo);
+    public static List<Carro> getCarros(Context context, int tipo, boolean refresh) throws IOException {
+        List<Carro> carros = !refresh ? getCarrosFromBranco(context, tipo) : null;
 
-
-//        List<Carro> carros = getCarrosDoArquivo(context, tipo);
         if (carros != null && !carros.isEmpty()) {
             return carros;
         }
 
-        return getCarrosFromWebService(context, tipo);
+        return getCarrosFromWebService(context, tipo, refresh);
     }
 
     private static List<Carro> getCarrosFromBranco(Context context, int tipo) {

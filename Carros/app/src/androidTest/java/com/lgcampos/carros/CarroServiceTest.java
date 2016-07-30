@@ -15,7 +15,7 @@ import java.util.List;
 public class CarroServiceTest extends AndroidTestCase {
 
     public void testGetCarros() throws IOException {
-        List<Carro> carros = CarroService.getCarrosFromWebService(getContext(), R.string.esportivos);
+        List<Carro> carros = CarroService.getCarrosFromWebService(getContext(), R.string.esportivos, pullToRefresh);
         assertNotNull(carros);
 
         assertTrue(carros.size() == 10);
