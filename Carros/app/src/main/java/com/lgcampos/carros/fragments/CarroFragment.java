@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,7 +22,7 @@ import org.parceler.Parcels;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CarroFragment extends Fragment {
+public class CarroFragment extends BaseFragment {
 
     private Carro carro;
 
@@ -27,6 +30,7 @@ public class CarroFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_carro, container, false);
         carro = Parcels.unwrap(getArguments().getParcelable("carro"));
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -37,5 +41,33 @@ public class CarroFragment extends Fragment {
         textView.setText(carro.desc);
         ImageView imageView = (ImageView) getView().findViewById(R.id.img);
         Picasso.with(getContext()).load(carro.urlFoto).fit().into(imageView);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_frag_carro, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_edit) {
+            toast("Editar: " + carro.nome);
+            return true;
+        } else if (item.getItemId() == R.id.action_delete) {
+            toast("Deletar: " + carro.nome);
+            return true;
+        } else if (item.getItemId() == R.id.action_share) {
+            toast("Compartilhar: " + carro.nome);
+            return true;
+        } else if (item.getItemId() == R.id.action_video) {
+            toast("Vídeo");
+            return true;
+        } else if (item.getItemId() == R.id.action_maps) {
+            toast("Mapa");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
