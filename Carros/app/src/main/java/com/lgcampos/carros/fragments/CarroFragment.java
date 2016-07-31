@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lgcampos.carros.CarrosApplication;
 import com.lgcampos.carros.R;
 import com.lgcampos.carros.activity.CarroActivity;
 import com.lgcampos.carros.domain.Carro;
@@ -26,6 +27,7 @@ import org.parceler.Parcels;
  */
 public class CarroFragment extends BaseFragment {
 
+    public static final String REFRESH = "refresh";
     private Carro carro;
 
     @Override
@@ -63,6 +65,7 @@ public class CarroFragment extends BaseFragment {
 
                     CarroActivity activity = (CarroActivity) getActivity();
                     activity.setTitle(carro.nome);
+                    CarrosApplication.getInstance().getBus().post(REFRESH);
                 }
             });
             return true;
@@ -74,6 +77,7 @@ public class CarroFragment extends BaseFragment {
                     CarroDB db = new CarroDB(getActivity());
                     db.delete(carro);
                     getActivity().finish();
+                    CarrosApplication.getInstance().getBus().post(REFRESH);
                 }
             });
             return true;

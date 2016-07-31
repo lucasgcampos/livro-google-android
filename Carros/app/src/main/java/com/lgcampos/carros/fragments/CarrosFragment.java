@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lgcampos.carros.CarrosApplication;
 import com.lgcampos.carros.R;
 import com.lgcampos.carros.activity.CarroActivity;
 import com.lgcampos.carros.adapter.CarroAdapter;
 import com.lgcampos.carros.domain.Carro;
 import com.lgcampos.carros.domain.CarroService;
+import com.squareup.otto.Subscribe;
 
 import org.parceler.Parcels;
 
@@ -37,6 +39,8 @@ public class CarrosFragment extends BaseFragment {
         if (getArguments() != null) {
             this.tipo = getArguments().getInt("tipo");
         }
+
+        CarrosApplication.getInstance().getBus().register(this);
     }
 
     @Override
@@ -132,5 +136,16 @@ public class CarrosFragment extends BaseFragment {
         public void onCancelled(String cod) {
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        CarrosApplication.getInstance().getBus().unregister(this);
+    }
+
+    @Subscribe
+    public void onBusAtualizarListaCarro(String refresh) {
+        taskCarros(false);
     }
 }
