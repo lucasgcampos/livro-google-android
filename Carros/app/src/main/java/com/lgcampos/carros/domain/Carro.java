@@ -16,6 +16,7 @@ public class Carro {
     public String urlVideo;
     public String latitude;
     public String longitude;
+    public  boolean selected;
 
     @Override
     public String toString() {

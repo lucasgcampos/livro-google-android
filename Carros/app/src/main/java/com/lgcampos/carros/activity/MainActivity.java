@@ -1,5 +1,6 @@
 package com.lgcampos.carros.activity;
 
+import android.app.backup.BackupManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +18,7 @@ import livroandroid.lib.utils.Prefs;
 public class MainActivity extends BaseActivity {
 
     public static final String PREFS_TAB_INDEX = "tabIdx";
+    private BackupManager backupManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +31,11 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                snack(v, "Exemplo de FAB Button" +
-                        "");
+                snack(v, "Exemplo de FAB Button");
             }
         });
+
+        backupManager = new BackupManager(getContext());
     }
 
     private void setupViewPagerTabs() {
@@ -57,6 +60,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 Prefs.setInteger(getContext(), PREFS_TAB_INDEX, viewPager.getCurrentItem());
+                backupManager.dataChanged();
             }
 
             @Override

@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.CarrosViewHolder> {
 
-    protected  static final String TAG = "livroandroid";
+    protected static final String TAG = "livroandroid";
     private final List<Carro> carros;
     private final Context context;
     private final CarroOnClickListener carroOnClickListener;
@@ -69,10 +69,25 @@ public class CarroAdapter extends RecyclerView.Adapter<CarroAdapter.CarrosViewHo
                 }
             });
         }
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                carroOnClickListener.onLongClickCarro(holder.itemView, position);
+                return true;
+            }
+        });
+
+        int corFundo = context.getResources().getColor(carro.selected ? R.color.primary : R.color.white);
+        holder.cardView.setCardBackgroundColor(corFundo);
+        int corFonte = context.getResources().getColor(carro.selected ? R.color.white : R.color.primary);
+        holder.nome.setTextColor(corFonte);
     }
 
     public interface CarroOnClickListener {
         void onClickCarro(View view, int index);
+
+        void onLongClickCarro(View itemView, int position);
     }
 
     @Override

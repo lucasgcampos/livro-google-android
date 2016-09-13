@@ -2,6 +2,11 @@
 
     <!-- Tema base. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Action Mode Overlay -->
+        <item name="windowActionModeOverlay">true</item>
+        <!-- Cor da action bar de contexto (CAB) -->
+        <item name="actionModeBackground">@color/primary</item>
+
         <!-- Cor primária do aplicativo -->
         <item name="colorPrimary">@color/primary</item>
         <!-- Variação escura da cor primária para a status bar e contextual app bars -->
