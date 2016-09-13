@@ -20,6 +20,7 @@ import com.lgcampos.carros.R;
 import com.lgcampos.carros.activity.CarroActivity;
 import com.lgcampos.carros.adapter.CarroAdapter;
 import com.lgcampos.carros.domain.Carro;
+import com.lgcampos.carros.domain.CarroDB;
 import com.lgcampos.carros.domain.CarroService;
 import com.squareup.otto.Subscribe;
 
@@ -129,6 +130,7 @@ public class CarrosFragment extends BaseFragment {
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 MenuInflater inflater = getActivity().getMenuInflater();
                 inflater.inflate(R.menu.menu_frag_carros_cab, menu);
+
                 return true;
             }
 
@@ -141,6 +143,18 @@ public class CarrosFragment extends BaseFragment {
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 List<Carro> selectedCarros = getSelectedCarros();
                 if (item.getItemId() == R.id.action_remove) {
+                    CarroDB carroDB = new CarroDB(getContext());
+
+                    try {
+                        for (Carro selectedCarro : selectedCarros) {
+                            carroDB.delete(selectedCarro);
+                            carros.remove(selectedCarro);
+                        }
+                    } finally {
+                        carroDB.close();
+                    }
+
+                    snack(recyclerView, "Carros excluídos com sucesso.");
                     toast("Remover " + selectedCarros);
                 } else if (item.getItemId() == R.id.action_share) {
                     toast("Compartilhar: " + selectedCarros);
@@ -173,6 +187,7 @@ public class CarrosFragment extends BaseFragment {
             } else if (selectedCarros.size() > 1) {
                 actionMode.setSubtitle(selectedCarros.size() + " carros selecionados");
             }
+
         }
     }
 
