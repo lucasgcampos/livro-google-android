@@ -1,6 +1,7 @@
 package com.lgcampos.carros.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,10 +27,13 @@ import com.squareup.otto.Subscribe;
 
 import org.parceler.Parcels;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import livroandroid.lib.utils.AndroidUtils;
+import livroandroid.lib.utils.IOUtils;
+import livroandroid.lib.utils.SDCardUtils;
 
 public class CarrosFragment extends BaseFragment {
 
@@ -157,7 +161,7 @@ public class CarrosFragment extends BaseFragment {
                     snack(recyclerView, "Carros excluídos com sucesso.");
                     toast("Remover " + selectedCarros);
                 } else if (item.getItemId() == R.id.action_share) {
-                    toast("Compartilhar: " + selectedCarros);
+                        startTask("compartilhar", new CompartilharTask(selectedCarros));
                 }
 
                 mode.finish();
@@ -252,5 +256,54 @@ public class CarrosFragment extends BaseFragment {
     @Subscribe
     public void onBusAtualizarListaCarro(String refresh) {
         taskCarros(false);
+    }
+
+    private class CompartilharTask implements TaskListener {
+
+        private ArrayList<Uri> imageUris = new ArrayList<>();
+        private final List<Carro> selectedCarros;
+
+        public CompartilharTask(List<Carro> selectedCarros) {
+            this.selectedCarros = selectedCarros;
+        }
+
+
+        @Override
+        public Object execute() throws Exception {
+            if (selectedCarros != null) {
+                for (Carro carro : selectedCarros) {
+                    String url = carro.urlFoto;
+                    String fileName = url.substring(url.lastIndexOf("/"));
+
+                    File file = SDCardUtils.getPrivateFile(getContext(), "carros", fileName);
+                    IOUtils.downloadToFile(carro.urlFoto, file);
+
+                    imageUris.add(Uri.fromFile(file));
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        public void updateView(Object response) {
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+            shareIntent.setType("image/*");
+
+            startActivity(Intent.createChooser(shareIntent, "Enviar Carros"));
+        }
+
+        @Override
+        public void onError(Exception exception) {
+            alert("Ocorreu a;gum erro ao compartilhar.");
+        }
+
+        @Override
+        public void onCancelled(String cod) {
+
+        }
     }
 }
