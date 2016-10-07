@@ -1,9 +1,11 @@
 package com.lgcampos.carros.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,11 +18,14 @@ import android.widget.TextView;
 import com.lgcampos.carros.CarrosApplication;
 import com.lgcampos.carros.R;
 import com.lgcampos.carros.activity.CarroActivity;
+import com.lgcampos.carros.activity.VideoActivity;
 import com.lgcampos.carros.domain.Carro;
 import com.lgcampos.carros.domain.CarroDB;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
+
+import livroandroid.lib.utils.IntentUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +38,14 @@ public class CarroFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_carro, container, false);
+
+        view.findViewById(R.id.imgPlayVideo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showVideo(carro.urlVideo, v);
+            }
+        });
+
         carro = Parcels.unwrap(getArguments().getParcelable("carro"));
         setHasOptionsMenu(true);
         return view;
@@ -85,7 +98,12 @@ public class CarroFragment extends BaseFragment {
             toast("Compartilhar: " + carro.nome);
             return true;
         } else if (item.getItemId() == R.id.action_video) {
-            toast("Vídeo");
+            String url = carro.urlVideo;
+
+            View menuItemView = getActivity().findViewById(item.getItemId());
+            if (menuItemView != null && url != null) {
+                showVideo(url, menuItemView);
+            }
             return true;
         } else if (item.getItemId() == R.id.action_maps) {
             toast("Mapa");
@@ -93,5 +111,30 @@ public class CarroFragment extends BaseFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showVideo(final String url, View ancoraView) {
+        if (url != null && ancoraView != null) {
+            PopupMenu popupMenu = new PopupMenu(getActionBar().getThemedContext(), ancoraView);
+            popupMenu.inflate(R.menu.menu_popup_video);
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (item.getItemId() == R.id.action_video_browser) {
+                        IntentUtils.openBrowser(getContext(), url);
+                    } else if (item.getItemId() == R.id.action_video_player) {
+                        IntentUtils.showVideo(getContext(), url);
+                    } else if (item.getItemId() == R.id.action_video_videoview) {
+                        Intent intent = new Intent(getContext(), VideoActivity.class);
+                        intent.putExtra("carro", Parcels.wrap(carro));
+                        startActivity(intent);
+                        IntentUtils.showVideo(getContext(), url);
+                    }
+                    return true;
+                }
+            });
+
+            popupMenu.show();
+        }
     }
 }
