@@ -62,5 +62,6 @@ Versao %s<br><br>
     <string name="action_video_player">Video Player</string>
     <string name="action_video_videoview">VideoView</string>
     <string name="title_activity_video">VideoActivity</string>
+    <string name="title_activity_mapa">MapaActivity</string>
 
 </resources>
